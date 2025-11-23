@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Key Generator & Registration</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* CSS yang Diperbaiki (Ditempatkan di sini agar lengkap) */
+        
+        /* Import Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+
+        :root {
+            --primary-color: #6a1b9a; /* Ungu gelap */
+            --secondary-color: #e0f2f7; /* Biru muda sangat pucat */
+            --accent-color: #ff80ab; /* Merah muda cerah */
+            --text-color-dark: #333;
+            --text-color-light: #f4f4f4;
+            --bg-light: #ffffff;
+            --bg-dark: #2c3e50;
+            --border-color: #ddd;
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-heavy: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #ffe0f0 100%); /* Gradasi latar belakang */
+            color: var(--text-color-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--bg-light);
+            border-radius: 12px;
+            box-shadow: var(--shadow-heavy);
+            padding: 40px;
+            max-width: 600px; /* Lebar Disesuaikan */
+            width: 90%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+        
+        h2 {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .generator-section {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: center;
+        }
+
+        /* --- STYLING FORM BARU --- */
+
+        .registration-form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            text-align: left; /* Teks label rata kiri */
+        }
+
+        .registration-form label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            margin-top: 10px;
+            display: block;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        .api-key-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 5px; /* Jarak antar input telah ditambahkan ke margin-top label */
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input:focus,
+        .api-key-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.2);
+            outline: none;
+        }
+        
+        /* API Key Input Styling */
+        .api-key-input {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #f0f4f7; /* Latar belakang abu-abu muda untuk readonly */
+            color: #555;
+            cursor: default;
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+            height: auto; /* Untuk memastikan tinggi input satu baris */
+        }
+        
+        /* Layout Input Nama */
+        .input-group {
+            display: flex;
+            gap: 20px; /* Jarak antara First Name dan Last Name */
+        }
+
+        .input-group > div {
+            flex-grow: 1;
+        }
+
+        /* Layout Tombol */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: var(--text-color-light);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px; /* Padding disesuaikan */
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-light);
+            flex: 1; /* Agar kedua tombol membagi ruang yang sama */
+            max-width: 200px;
+        }
+
+        button:hover {
+            background-color: #7b29ad;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                gap: 20px;
+            }
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .input-group {
+                flex-direction: column; /* First/Last Name menjadi tumpukan vertikal */
+                gap: 0;
+            }
+            
+            .button-group {
+                flex-direction: column; /* Tombol bertumpuk di layar kecil */
+            }
+
+            button {
+                max-width: 100%;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            .api-key-input {
+                margin-bottom: 5px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>API Key Generator</h1>
+        </header>
+
+        <main>
+            <section class="generator-section">
+                <h2>Registrasi Pengguna & API Key</h2>
+                
+                <form id="registrationForm" class="registration-form">
+                    
+                    <div class="input-group">
+                        <div>
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div>
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName">
+                        </div>
+                    </div>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="generatedKey">API Key (Otomatis)</label>
+                    <input type="text" id="generatedKey" readonly placeholder="Klik 'Generate Key'" class="api-key-input">
+                    
+                    <div class="button-group">
+                        <button type="button" id="generateApiBtn" class="generate-button">Generate Key</button>
+                        <button type="submit" id="saveBtn" class="save-button" disabled>Save & Register</button>
+                    </div>
+                    
+                    <p id="formMessage" style="margin-top: 20px; font-weight: 600;"></p>
+                </form>
+                
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 API Generator. Full Stack Integrated.</p>
+        </footer>
+    </div>
+
+    <script>
+        const generateBtn = document.getElementById('generateApiBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        // keyField sekarang mengacu ke input text, bukan textarea
+        const keyField = document.getElementById('generatedKey'); 
+        const form = document.getElementById('registrationForm');
+        const message = document.getElementById('formMessage');
+        
+        // --- 1. Fungsi GENERATE KEY (POST /create - Hanya Membuat Key String) ---
+        generateBtn.addEventListener('click', async () => {
+            message.textContent = 'Generating key...';
+            message.style.color = '#333';
+            generateBtn.disabled = true;
+            saveBtn.disabled = true;
+            keyField.value = 'Connecting...';
+
+            try {
+                // Memanggil backend untuk membuat key string
+                const response = await fetch('/create', { method: 'POST' });
+                const result = await response.json();
+                
+                if (response.ok && result.status === 'success') {
+                    // Mengisi input dengan key string yang baru dibuat
+                    keyField.value = result.apiKey; 
+                    
+                    message.textContent = `✅ Key berhasil dibuat. Silakan isi form dan klik Save.`;
+                    message.style.color = 'green';
+                    saveBtn.disabled = false; // Aktifkan tombol Save
+                } else {
+                    message.textContent = `❌ Error: ${result.message || 'Gagal generate key'}`;
+                    message.style.color = 'red';
+                    keyField.value = "Klik 'Generate Key'"; // Reset placeholder
+                }
+            } catch (error) {
+                message.textContent = '❌ GAGAL KONEKSI SERVER.';
+                message.style.color = 'red';
+                keyField.value = "Klik 'Generate Key'"; // Reset placeholder
+            } finally {
+                generateBtn.disabled = false;
+            }
+        });
+
+        // --- 2. Fungsi SAVE USER (POST /register - Menyimpan Key dan User) ---
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const currentApiKey = keyField.value.trim(); 
+
+            if (!currentApiKey || currentApiKey === "Klik 'Generate Key'" || currentApiKey === 'Connecting...') {
+                message.textContent = 'Harap Generate Key terlebih dahulu!';
+                message.style.color = 'orange';
+                return;
+            }
+
+            message.textContent = 'Saving user data...';
+            message.style.color = '#333';
+            saveBtn.disabled = true;
+
+            const userData = {
+                firstName: document.getElementById('firstName').value.trim(), 
+                lastName: document.getElementById('lastName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                apiKey: currentApiKey 
+            };
+            
+            if (!userData.firstName || !userData.email) {
+                message.textContent = 'Nama Depan dan Email wajib diisi!';
+                message.style.color = 'red';
+                saveBtn.disabled = false;
+                return;
+            }
+
+            try {
+                // Panggilan API ke /register
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData)
+                });
+                const result = await response.json();
+
+                if (response.ok) {
+                    message.textContent = `🎉 Registrasi Berhasil! Key tersimpan untuk ${userData.email}.`;
+                    message.style.color = 'blue';
+                    
+                    // Reset State
+                    form.reset();
+                    keyField.value = "Klik 'Generate Key'";
+                    saveBtn.disabled = true; // Nonaktifkan Save sampai key baru dibuat
+                } else {
+                    message.textContent = `❌ Error Save: ${result.message || 'Gagal menyimpan user'}`;
+                    message.style.color = 'red';
+                }
+            } catch (error) {
+                message.textContent = '❌ GAGAL KONEKSI SERVER (Register).';
+                message.style.color = 'red';
+            } finally {
+                // Jika terjadi error, biarkan tombol Generate Key aktif, tapi Save tetap disabled (karena form sudah di-submit/error)
+                if (!response || !response.ok) {
+                    saveBtn.disabled = false;
+                }
+            }
+        });
+        
+    </script>
+</body>
+</html>
